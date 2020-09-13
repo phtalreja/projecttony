@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyANc5OhpQ6vFTFs9VRTrNuFzMijhwmrZ_w",
+    apiKey: process.env.FIREBASE_KEY,
     authDomain: "pennapps2020-1df2f.firebaseapp.com",
     databaseURL: "https://pennapps2020-1df2f.firebaseio.com",
     projectId: "pennapps2020-1df2f",
