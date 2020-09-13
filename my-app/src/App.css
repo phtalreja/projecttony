@@ -27,6 +27,7 @@
 .App-link {
   color: #61dafb;
 }
+
 canvas{
 
 }
@@ -36,6 +37,11 @@ canvas{
   padding: 200px;
   justify-content: center;
   align-items: center;
+}
+
+.title {
+  font-family: Quicksand;
+  font-size: 5vw;
 }
 
 @keyframes App-logo-spin {

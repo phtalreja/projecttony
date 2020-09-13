@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {Line} from 'react-chartjs-2'
@@ -11,9 +11,6 @@ function createChart(inputData, phrase) {
   }
   const chart = {
     labels: chartlabels,
-    
-
-    //labels: ['9:00 am','10:00 am','11:00 am','12:00 pm', '1:00 pm','2:00 pm','3:00 pm','4:00 pm','5:00 pm','6:00 pm','7:00 pm','8:00 pm','9:00 pm','10:00 pm','11:00 pm'],
     datasets: [
       {
 
@@ -21,53 +18,134 @@ function createChart(inputData, phrase) {
         fill: false,
         responsive: true,
         lineTension: 0.1,
-        backgroundColor: 'rgba(124,178,246, 1)',
-        borderColor: 'rgba(124,178,246, 1)',
-        pointBorderColor: 'rgba(124,178,246, 1)',
+        backgroundColor:  'rgba(124,178,246, 1)', //'rgba(57,255,2,1)', //'rgba(191,87,0,1)',
+        borderColor: 'rgba(124,178,246, 1)', //'rgba(191,87,0,1)'
+        pointBorderColor: 'rgba(124,178,246, .5)', // rgba(25,25,100,.5)',
         borderWidth: 2,
         spanGaps: true,
         data: inputData
       }
     ],
   }
-
   return (
-    <Line
-      data={chart}
-    
-    />
-    )
-
+  <Line
+    data={chart}
+    options={{
+      title:{
+        display:true,
+        text: phrase,
+        fontSize:32,
+        fontFamily: 'Quicksand',
+        fontColor : 'black'
+      },
+      scales:{
+        yAxes:[{gridLines: {
+          display: true ,
+          color: "#696969"
+        },
+          ticks:{fontFamily: 'Quicksand', fontSize: 20, fontColor : 'black', beginAtZero:true}
+        }],
+        xAxes:[{gridLines: {
+          display: true ,
+          color: "#696969"
+        },
+          ticks:{fontFamily: 'Quicksand', fontColor : 'black', fontSize: 20}
+        }]
+      },
+      legend:{
+        
+        labels: {fontFamily: 'Quicksand', fontColor : 'black', fontSize: 20},
+        display:false,
+        position:'top'
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+    }}
+  />
+  )
 
 }
+
+
+// This class works on its own, but I am having trouble sending the value that was submitted to the Container class. 
+// I am trying to do it with props, but it's not working
+
+class TextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({ value: this.element.value });
+    this.props.handleSubmit(this.state.value)
+  }
+
+  render() {
+    return (
+      <div>
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          <input type="text" ref={el => this.element = el} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+      <p>{ this.state.value }</p>
+      </div>
+    );
+  }
+}
+
+class Container extends Component {
+  constructor() {
+    super()
+    this.state = {data : [.3, .4, .9, .7, .3, .1], phrase : "Sentiment for ___"}
+    //this.handleSubmit = this.handleSubmit.bind(this)
+        
+    }
+ 
+    // Need to call this function and update the state of the Container component when the form is submitted
+    handleInputChange(input) {
+      this.setState({
+        phrase : "Sentiment for " + input
+      })
+    }
+  
+
+  render() {
+
+    var graph = createChart(this.state.data, this.state.phrase)
+
+    return (
+      
+      <React.Fragment>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Quicksand" />
+        <div>
+          <TextInput> props={this}</TextInput>
+          {this.state.phrase}
+        </div>
+      <div class = "centered">
+        {graph}
+      </div>
+    </React.Fragment>
+    )
+  }
+
+}
+
 function App() {
-  var data = [0, .4, .3, .6, .4, .3, .6, .9]
-
-  var chart = createChart(data,"Sentiment for Pizza")
-
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-     
-      <div class = "centered">
-        {chart}
+      <div class="title">
+        TITLE OF THE APPLICATION
       </div>
+      <div>
+      <Container/>
+        </div>
     </div>
   );
 }
-
 
 export default App;
